@@ -61,6 +61,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $connection = Yii::$app->db;
+        $command = $connection->CreateCommand("SELECT * FROM client");
+        $rows = $command->queryAll();
+        var_dump($rows);
+
         return $this->render('index');
     }
 
