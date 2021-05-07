@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+use app\repositories\video\PsqlVideoRepository;
+use app\repositories\video\VideoRepositoryInterface;
+use app\services\VideoService;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -10,6 +16,12 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+    ],
+    'container' => [
+        'definitions' => [
+            VideoService::class => ['class' => VideoService::class],
+            VideoRepositoryInterface::class => ['class' => PsqlVideoRepository::class],
+        ],
     ],
     'components' => [
         'request' => [
@@ -24,7 +36,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'video/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -43,14 +55,13 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '/' => 'video/list',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
